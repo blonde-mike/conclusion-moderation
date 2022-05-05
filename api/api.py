@@ -43,9 +43,12 @@ data = {
                           "latestDay": 2416371
                         },
                         "localizedText": "13 September 1903",
+                        "modifier": null,
                         "normalizedText": "13 September 1903",
                         "originalText": "13 September 1903"
                       },
+                      "deceasedFlag": null,
+                      "description": null,
                       "place": {
                         "geoCode": {
                           "latitude": 30.3098,
@@ -56,7 +59,7 @@ data = {
                         "normalizedText": "Colonia Juárez, Casas Grandes, Chihuahua, Mexico",
                         "originalText": "Colonia Juárez, Casas Grandes, Chihuahua, Mexico"
                       },
-                      "sourceCount": 16,
+                      "sourceCount": 14,
                       "title": "",
                       "type": "BIRTH"
                     },
