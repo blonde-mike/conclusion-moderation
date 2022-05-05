@@ -19,11 +19,10 @@ const ModerateButton: FC<ModerateButtonProps> = ({cisId, conclusionType, personI
   }
 
   const handleConfirmModeration = () => {
-    // let userKey = findLocalItems(/prod-v2-user/);
     console.log(cisId);
     console.log(conclusionType);
     console.log(personId);
-    // localStorage.getItem()
+    // Make a call to the backend to set moderation
     setOpenModerateNotice(false);
   }
   

@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         const userId = findLocalItems(/beta-v2-user/)[0].val.user.cisId;
         const personId = window.location.href.split('/')[6];
-        console.log(userId);
+        // In order for this logic to work, sign in to FamilySearch, then go to Family Tree > Overview > Recents > Mary Haws
         for (let i = 0; i < conclusions.length; i++) {
             if (userId === 'cis.user.M7X1-R1ZT') {
                 let conShadow = conclusions.item(i).shadowRoot;
