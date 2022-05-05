@@ -12,21 +12,25 @@ data = {
         "name": {
             "moderator": {
                 "userId": "cis.user.M7X1-R1ZT",
+                "contactName": "blondemike",
             },
             "proposed": null,
         },
         "sex": {
             "moderator": {
                 "userId": "cis.user.M7X1-R1ZT",
+                "contactName": "blondemike",
             },
             "proposed": null,
         },
         "birth": {
             "moderator": {
                 "userId": "cis.user.M7X1-R1ZT",
+                "contactName": "blondemike",
             },
             "proposed": {
                 "userId": "cis.user.M7X1-R1ZB",
+                "contactName": "blondemike2",
                 "conclusion": {
                     "contributor": {
                       "date": "June 5, 2021",
@@ -77,6 +81,7 @@ data = {
         "death": {
             "moderator": {
                 "userId": "cis.user.M7X1-R1ZT",
+                "contactName": "blondemike",
             },
             "proposed": null,
         },
