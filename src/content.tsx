@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ModerateButton from './components/ModerateButton/ModerateButton'
+import ProposeChangeButton from './components/ProposeChangeButton/ProposeChangeButton'
+import ModeratedBy from './components/ModeratedBy/ModeratedBy'
 import { getModerationByPerson } from './moderator.service';
 import { findLocalItems } from './helpers';
 
@@ -33,7 +35,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
             let moderator = '';
             let isOwn = false;
             if (moderation[eventType].moderator !== null){
-                moderator = moderation[eventType].moderator.userId;
+                moderator = moderation[eventType].moderator.contactName;
                 if(moderation[eventType].moderator.userId === userId) {
                     isOwn = true;
                 }
@@ -48,8 +50,24 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 moderateButtonDiv.id = 'moderate-wrapper';
                 conHeader?.appendChild(moderateButtonDiv);
                 ReactDOM.render(<ModerateButton cisId={userId} conclusionType={eventType} personId={personId} moderator={moderator} isOwn={isOwn}/>, moderateButtonDiv);
-            } else if (moderator) {
+            } else if (moderator && !isOwn) {
+                // remove edit button
                 conHeader?.removeChild(conHeader?.querySelector("#editButton") as Element);
+
+                // insert ProposeChangeButton
+                let proposeChangeButton = document.createElement('span');
+                proposeChangeButton.id = 'propose-wrapper';
+                conHeader?.appendChild(proposeChangeButton);
+                ReactDOM.render(<ProposeChangeButton/>, proposeChangeButton);
+
+                // insert dot separator
+                conHeader?.appendChild(secondDot);
+
+                // insert ModeratedBy
+                let moderatedBy = document.createElement('span');
+                moderatedBy.id = 'moderated-by-wrapper';
+                conHeader?.appendChild(moderatedBy);
+                ReactDOM.render(<ModeratedBy moderatorName={moderator}/>, moderatedBy);
             }
         }
     }
