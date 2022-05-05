@@ -1,8 +1,12 @@
 import flask
+from flask_cors import CORS
 from flask import jsonify
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+# fake out Python to allow more json-like data declaration
 false = False
 true = True
 null = None
