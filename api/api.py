@@ -1,6 +1,6 @@
 import flask
 from flask_cors import CORS
-from flask import jsonify
+from flask import jsonify, abort
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -102,6 +102,8 @@ def home():
 
 @app.route('/api/<pid>', methods=['GET'])
 def data_for_person(pid):
+    if not data.get(pid):
+        abort(404)
     return jsonify(data[pid])
 
 app.run()
