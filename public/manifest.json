@@ -17,7 +17,7 @@
   "content_scripts": [{
     "js": [ "static/js/content.js" ],
     "matches": [
-      "https://www.familysearch.org/tree/person/details/*"
+      "https://beta.familysearch.org/tree/person/details/*"
     ]
   }],
   "icons": {
