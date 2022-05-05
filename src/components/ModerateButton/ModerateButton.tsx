@@ -4,10 +4,12 @@ import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Typography }
 interface ModerateButtonProps {
   cisId: string,
   conclusionType: string,
-  personId: string
+  personId: string,
+  moderator: string,
+  isOwn: boolean
 }
 
-const ModerateButton: FC<ModerateButtonProps> = ({cisId, conclusionType, personId}) => {
+const ModerateButton: FC<ModerateButtonProps> = ({cisId, conclusionType, personId, moderator, isOwn}) => {
   const [openModerateNotice, setOpenModerateNotice] = useState(false);
 
   const handleModerateClick = () => {
@@ -28,10 +30,14 @@ const ModerateButton: FC<ModerateButtonProps> = ({cisId, conclusionType, personI
   
   return (
     <span>
+      {moderator === '' && !isOwn &&
       <Button className="edit-button fs-button fs-button--minor fs-button--small"
       onClick={handleModerateClick}>
         Moderate
-      </Button>
+      </Button>}
+      {isOwn && 
+      <span>You are moderating this event.
+        </span>}
       <Dialog onClose={handleCloseModerateDialog}
       open={openModerateNotice}
       sx={{

@@ -11,6 +11,9 @@
     "webNavigation",
     "tabs"
   ],
+  "host_permissions": [
+    "https://beta.familysearch.org/"
+  ],
   "background": {
     "scripts": ["static/js/background.js"]
   },
