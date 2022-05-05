@@ -1,9 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "Extension Name",
+  "name": "Conclusion Moderation",
   "version": "0.1",
   "description": "Some Description",
   "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "cookies",
+    "webNavigation",
+    "tabs"
   ],
   "background": {
     "scripts": ["static/js/background.js"]
@@ -11,7 +17,7 @@
   "content_scripts": [{
     "js": [ "static/js/content.js" ],
     "matches": [
-      "http://*.example.com/*", "https://*.example.com/*"
+      "https://www.familysearch.org/tree/person/details/*"
     ]
   }],
   "icons": {
