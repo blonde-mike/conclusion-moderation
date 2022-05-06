@@ -35,8 +35,10 @@ data = {
             "proposed": [
                 {
                 "userId": "cis.user.M7X1-R1ZB",
-                "contactName": "blondemike2",
+                "contactName": "testman77",
                 "conclusion": {
+                    "date": "13 September 1903",
+                    "place": "Colonia Juárez, Casas Grandes, Chihuahua, Mexico",
                     "contributor": {
                       "date": "June 5, 2021",
                       "id": "MM7W-8GC",

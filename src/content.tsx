@@ -19,6 +19,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         .then(async () => {
         let conclusions = card?.querySelectorAll('fs-tree-conclusion') as NodeListOf<Element>;
                 const userId = findLocalItems(/beta-v2-user/)[0].val.user.cisId;
+                const userContactName = findLocalItems(/beta-v2-user/)[0].val.user.contactName;
                 const personId = window.location.href.split('/')[6];
                 let moderation: any = {};
                 await getModerationByPerson(personId)
@@ -56,12 +57,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                         let moderateButtonDiv = document.createElement('span');
                         moderateButtonDiv.id = 'moderate-wrapper';
                         conHeader?.appendChild(moderateButtonDiv);
-                        ReactDOM.render(<ModerateButton cisId={userId} conclusionType={eventType} personId={personId} moderator={moderator} isOwn={isOwn}/>, moderateButtonDiv);
+                        console.log(moderator);
+                        ReactDOM.render(<ModerateButton cisId={userId} contactName={userContactName} conclusionType={eventType} personId={personId} moderator={moderator} isOwn={isOwn}/>, moderateButtonDiv);
                     } else if (moderator && !isOwn) {
                         // remove edit button
                         // conHeader?.removeChild(conHeader?.querySelector("#editButton") as Element);
                         let proposeChangeButton = conHeader?.querySelector("#editButton");
-                        if (proposeChangeButton != undefined) proposeChangeButton.innerHTML = proposeChangeButton?.innerHTML.replace('Edit','Propose A Change');
+                        if (proposeChangeButton != undefined) proposeChangeButton.innerHTML = proposeChangeButton?.innerHTML.replace('Edit',`Propose A Change (${proposed.length})`);
                         proposeChangeButton?.addEventListener('click', () => {
                             sleepUntil(() => document.querySelector('fs-tree-conclusion-edit')?.shadowRoot, 7000)
                             .then(() => {
@@ -82,15 +84,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                                     conclusionEditor?.querySelector('div.left-col')?.removeChild(proposedChangesWrapper);
                                 })
                                 
-                                ReactDOM.render(<ProposedChanges proposedList={proposed}/>, proposedChangesWrapper)
+                                ReactDOM.render(<ProposedChanges proposedList={proposed} conclusionType={eventType}/>, proposedChangesWrapper)
 
                                 let proposeChangeButton = document.createElement('span');
                                 proposeChangeButton.id = 'propose-wrapper';
                                 conclusionEditor?.querySelector('div.primary-buttons')?.replaceChild(proposeChangeButton, conclusionEditor?.querySelector('button[data-test-save-button]') as Node);
-                                ReactDOM.render(<ProposeChangeButton conclusionType={eventType} proposeChangeDialog={conclusionEditor}/>, proposeChangeButton);
                                 let inputFields = conclusionEditor?.querySelector('fs-tree-name-template')?.shadowRoot;
-                                console.log(inputFields);
-                                console.log(inputFields?.querySelector('input[data-test-nameform-first-name="roman"]'))//?.innerHTML)
+                                ReactDOM.render(<ProposeChangeButton conclusionType={eventType} personId={personId} cisId={userId} contactName={userContactName} proposeChangeDialog={conclusionEditor}/>, proposeChangeButton);
                             })
                             .catch(error => {
 
