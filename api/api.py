@@ -135,7 +135,7 @@ def verify_and_post(data, pid, slot, required_attrs, post_attr):
     # traverse down to where the moderator/proposed would be
     try:
         slot_data = traverse(data, pid, slot)
-    except Error as e:
+    except Exception as e:
         print(e)
         stub_person(data, pid)
         slot_data = traverse(data, pid, slot)
@@ -154,6 +154,10 @@ def traverse(data, *path_items):
             abort(404)
         data_to_return = sub_data_to_return
     return data_to_return
+
+def verify_attribute(data, required_attr):
+    if not data[required_attr]:
+        abort(400)
 
 def stub_person(data, pid):
     person_data = {
