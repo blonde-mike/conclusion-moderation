@@ -1,16 +1,19 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Typography } from '@mui/material'
+import { createModeration } from '../../moderator.service';
 
 interface ModerateButtonProps {
   cisId: string,
+  contactName: string,
   conclusionType: string,
   personId: string,
   moderator: string,
   isOwn: boolean
 }
 
-const ModerateButton: FC<ModerateButtonProps> = ({cisId, conclusionType, personId, moderator, isOwn}) => {
+const ModerateButton: FC<ModerateButtonProps> = ({cisId, contactName, conclusionType, personId, moderator, isOwn}) => {
   const [openModerateNotice, setOpenModerateNotice] = useState(false);
+  const [isOwnLocal, setIsOwnLocal] = useState(isOwn);
 
   const handleModerateClick = () => {
     setOpenModerateNotice(true);
@@ -21,21 +24,38 @@ const ModerateButton: FC<ModerateButtonProps> = ({cisId, conclusionType, personI
   }
 
   const handleConfirmModeration = () => {
+    const moderatorInfo = {
+      userId: cisId,
+      contactName: contactName
+    }
+
+    let moderation: any = {};
+    createModeration(personId, conclusionType, moderatorInfo)
+    .then(results => {
+      moderation = results;
+      console.log(moderation);
+      setIsOwnLocal(true);
+      setOpenModerateNotice(false);
+    })
+
     console.log(cisId);
     console.log(conclusionType);
     console.log(personId);
     // Make a call to the backend to set moderation
-    setOpenModerateNotice(false);
   }
+
+  useEffect(() => {
+
+  },[isOwn])
   
   return (
     <span>
-      {moderator === '' && !isOwn &&
+      {moderator === '' && !isOwnLocal &&
       <Button className="edit-button fs-button fs-button--minor fs-button--small"
       onClick={handleModerateClick}>
         Moderate
       </Button>}
-      {isOwn && 
+      {isOwnLocal && 
       <span>You are moderating this event.
         </span>}
       <Dialog onClose={handleCloseModerateDialog}
