@@ -32,7 +32,8 @@ data = {
                 "userId": "cis.user.M7X1-R1ZT",
                 "contactName": "blondemike",
             },
-            "proposed": {
+            "proposed": [
+                {
                 "userId": "cis.user.M7X1-R1ZB",
                 "contactName": "blondemike2",
                 "conclusion": {
@@ -77,6 +78,7 @@ data = {
                     "type": "BIRTH"
                   }
             }
+            ]
         },
         "christening": {
             "moderator": null,

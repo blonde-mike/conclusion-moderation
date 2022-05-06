@@ -10,3 +10,20 @@ export function findLocalItems (query) {
     }
     return results;
   }
+
+export const sleepUntil = async (f, timeoutMs) => {
+    return new Promise((resolve, reject) => {
+        const timeWas = new Date();
+        const wait = setInterval(function() {
+        if (f()) {
+            console.log("resolved after", new Date() - timeWas, "ms");
+            clearInterval(wait);
+            resolve();
+        } else if (new Date() - timeWas > timeoutMs) { // Timeout
+            console.log("rejected after", new Date() - timeWas, "ms");
+            clearInterval(wait);
+            reject();
+        }
+        }, 20);
+    });
+}

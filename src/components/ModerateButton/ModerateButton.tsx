@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Typography } from '@mui/material'
+import { createModeration } from '../../moderator.service';
 
 interface ModerateButtonProps {
   cisId: string,
@@ -21,11 +22,25 @@ const ModerateButton: FC<ModerateButtonProps> = ({cisId, conclusionType, personI
   }
 
   const handleConfirmModeration = () => {
+    const moderatorInfo = {
+      userId: cisId,
+      contactName: moderator
+    }
+
+    let moderation: any = {};
+    createModeration(personId, conclusionType, moderatorInfo)
+    .then(results => {
+      moderation = results;
+      console.log(moderation);
+      // moderator = moderation.con
+      isOwn = true;
+      setOpenModerateNotice(false);
+    })
+
     console.log(cisId);
     console.log(conclusionType);
     console.log(personId);
     // Make a call to the backend to set moderation
-    setOpenModerateNotice(false);
   }
   
   return (

@@ -13,3 +13,24 @@ export async function getModerationByPerson(pid: string) {
 
     return moderation;
 }
+
+export async function createModeration(pid: string, eventType: string, moderator: any) {
+    let moderation: Object = {};
+
+    await fetch(url + `/api/${pid}/${eventType}/moderator`,
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(moderator)
+        }
+    )
+    .then(response => response.json())
+    .then(data => {
+        moderation = data;
+    });
+
+    return moderation;
+}
