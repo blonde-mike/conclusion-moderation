@@ -4,8 +4,7 @@ from flask import request, jsonify, abort
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}}, expose_headers=["Content-Type"], send_wildcard=True)
 
 # fake out Python to allow more json-like data declaration
 false = False
