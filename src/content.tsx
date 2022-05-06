@@ -78,13 +78,17 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                                 conclusionEditor?.querySelector('button.fs-dialog__close')?.addEventListener('click', () => {
                                     conclusionEditor?.querySelector('div.left-col')?.removeChild(proposedChangesWrapper);
                                 })
-                                // conclusionEditor?.replaceChild(proposedChangesWrapper, conclusionEditor?.querySelector('div#proposed-changes-wrapper') as Node);
-                                // if (conclusionEditor?.querySelector('div#proposed-changes-wrapper') == undefined) {
-                                //     conclusionEditor?.querySelector('div.left-col')?.appendChild(proposedChangesWrapper);
-                                // } else {
-                                //     conclusionEditor?.replaceChild(proposedChangesWrapper, conclusionEditor?.querySelector('div#proposed-changes-wrapper') as Node);
-                                // }
+                                conclusionEditor?.querySelector('button[data-test-close-cancel-button]')?.addEventListener('click', () => {
+                                    conclusionEditor?.querySelector('div.left-col')?.removeChild(proposedChangesWrapper);
+                                })
+                                
                                 ReactDOM.render(<ProposedChanges proposedList={proposed}/>, proposedChangesWrapper)
+
+                                let proposeChangeButton = document.createElement('span');
+                                proposeChangeButton.id = 'propose-wrapper';
+                                conclusionEditor?.querySelector('div.primary-buttons')?.replaceChild(proposeChangeButton, conclusionEditor?.querySelector('button[data-test-save-button]') as Node);
+                                ReactDOM.render(<ProposeChangeButton conclusionType={eventType} proposeChangeDialog={conclusionEditor}/>, proposeChangeButton);
+                                console.log(conclusionEditor?.querySelector('fs-tree-name-template')?.shadowRoot?.querySelector('input[part="firstName"]'))//?.innerHTML)
                             })
                             .catch(error => {
 
@@ -92,10 +96,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                         })
                         
                         // insert ProposeChangeButton
-                        // let proposeChangeButton = document.createElement('span');
-                        // proposeChangeButton.id = 'propose-wrapper';
-                        // conHeader?.appendChild(proposeChangeButton);
-                        // ReactDOM.render(<ProposeChangeButton/>, proposeChangeButton);
         
                         // insert dot separator
                         conHeader?.appendChild(secondDot);
