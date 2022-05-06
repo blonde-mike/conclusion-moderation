@@ -4,6 +4,7 @@ from flask import request, jsonify, abort
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # fake out Python to allow more json-like data declaration
@@ -104,37 +105,6 @@ def home():
 def data_for_person(pid):
     return jsonify(traverse(data, pid))
 
-@app.route('/api/<pid>', methods=['POST'])
-def data_for_person_POST(pid):
-    person_data = {
-        "name": {
-            "moderator": null,
-            "proposed": null,
-        },
-        "sex": {
-            "moderator": null,
-            "proposed": null,
-        },
-        "birth": {
-            "moderator": null,
-            "proposed": null,
-        },
-        "christening": {
-            "moderator": null,
-            "proposed": null,
-        },
-        "death": {
-            "moderator": null,
-            "proposed": null,
-        },
-        "burial": {
-            "moderator": null,
-            "proposed": null,
-        },
-    }
-    data[pid] = person_data
-    return jsonify(traverse(data, pid))
-
 @app.route('/api/<pid>/<slot>', methods=['GET'])
 def data_for_person_slot(pid, slot):
     return jsonify(traverse(data, pid, slot))
@@ -163,14 +133,19 @@ def verify_and_post(data, pid, slot, required_attrs, post_attr):
     # make sure there is a proper application/json body
     if not request.json:
         abort(400)
-    # traverse down to where the moderator would be
-    slot_data = traverse(data, pid, slot)
+    # traverse down to where the moderator/proposed would be
+    try:
+        slot_data = traverse(data, pid, slot)
+    except Error as e:
+        print(e)
+        stub_person(data, pid)
+        slot_data = traverse(data, pid, slot)
     post_data = request.json
     for required_attr in required_attrs:
         verify_attribute(post_data, required_attr)
     slot_data[post_attr] = post_data
-    # re-traverse to make sure the data is updated properly
-    return jsonify(traverse(data, pid, slot, "moderator"))
+    # re-traverse to make sure the data is updated properly, also send CORS header for localhost access
+    return jsonify(traverse(data, pid, slot, post_attr))
 
 def traverse(data, *path_items):
     data_to_return = data
@@ -180,5 +155,34 @@ def traverse(data, *path_items):
             abort(404)
         data_to_return = sub_data_to_return
     return data_to_return
+
+def stub_person(data, pid):
+    person_data = {
+        "name": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "sex": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "birth": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "christening": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "death": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "burial": {
+            "moderator": null,
+            "proposed": null,
+        },
+    }
+    data[pid] = person_data
 
 app.run()
