@@ -1,6 +1,6 @@
 import flask
 from flask_cors import CORS
-from flask import jsonify, abort
+from flask import request, jsonify, abort
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -102,8 +102,83 @@ def home():
 
 @app.route('/api/<pid>', methods=['GET'])
 def data_for_person(pid):
-    if not data.get(pid):
-        abort(404)
-    return jsonify(data[pid])
+    return jsonify(traverse(data, pid))
+
+@app.route('/api/<pid>', methods=['POST'])
+def data_for_person_POST(pid):
+    person_data = {
+        "name": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "sex": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "birth": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "christening": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "death": {
+            "moderator": null,
+            "proposed": null,
+        },
+        "burial": {
+            "moderator": null,
+            "proposed": null,
+        },
+    }
+    data[pid] = person_data
+    return jsonify(traverse(data, pid))
+
+@app.route('/api/<pid>/<slot>', methods=['GET'])
+def data_for_person_slot(pid, slot):
+    return jsonify(traverse(data, pid, slot))
+
+@app.route('/api/<pid>/<slot>/moderator', methods=['GET'])
+def data_for_person_slot_moderator(pid, slot):
+    return jsonify(traverse(data, pid, slot, "moderator"))
+
+@app.route('/api/<pid>/<slot>/proposed', methods=['GET'])
+def data_for_person_slot_proposed(pid, slot):
+    return jsonify(traverse(data, pid, slot, "proposed"))
+
+@app.route('/api/<pid>/<slot>/moderator', methods=['POST', 'PUT'])
+def data_for_person_slot_moderator_POST(pid, slot):
+    required_attrs = [ "userId", "contactName" ]
+    post_attr = "moderator"
+    return verify_and_post(data, pid, slot, required_attrs, post_attr)
+
+@app.route('/api/<pid>/<slot>/proposed', methods=['POST', 'PUT'])
+def data_for_person_slot_proposed_POST(pid, slot):
+    required_attrs = [ "userId", "contactName", "conclusion" ]
+    post_attr = "proposed"
+    return verify_and_post(data, pid, slot, required_attrs, post_attr)
+
+def verify_and_post(data, pid, slot, required_attrs, post_attr):
+    # make sure there is a proper application/json body
+    if not request.json:
+        abort(400)
+    # traverse down to where the moderator would be
+    slot_data = traverse(data, pid, slot)
+    post_data = request.json
+    for required_attr in required_attrs:
+        verify_attribute(post_data, required_attr)
+    slot_data[post_attr] = post_data
+    # re-traverse to make sure the data is updated properly
+    return jsonify(traverse(data, pid, slot, "moderator"))
+
+def traverse(data, *path_items):
+    data_to_return = data
+    for path_item in path_items:
+        sub_data_to_return = data_to_return.get(path_item)
+        if not sub_data_to_return:
+            abort(404)
+        data_to_return = sub_data_to_return
+    return data_to_return
 
 app.run()
