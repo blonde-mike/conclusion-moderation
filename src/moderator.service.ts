@@ -17,7 +17,7 @@ export async function getModerationByPerson(pid: string) {
 export async function createModeration(pid: string, eventType: string, moderator: any) {
     let moderation: Object = {};
 
-    await fetch(url + `/api/${pid}/${eventType}/moderator`,
+    await fetch(url + `api/${pid}/${eventType}/moderator`,
         {
             method: 'POST',
             headers: {

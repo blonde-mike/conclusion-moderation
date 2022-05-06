@@ -88,7 +88,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                                 proposeChangeButton.id = 'propose-wrapper';
                                 conclusionEditor?.querySelector('div.primary-buttons')?.replaceChild(proposeChangeButton, conclusionEditor?.querySelector('button[data-test-save-button]') as Node);
                                 ReactDOM.render(<ProposeChangeButton conclusionType={eventType} proposeChangeDialog={conclusionEditor}/>, proposeChangeButton);
-                                console.log(conclusionEditor?.querySelector('fs-tree-name-template')?.shadowRoot?.querySelector('input[part="firstName"]'))//?.innerHTML)
+                                let inputFields = conclusionEditor?.querySelector('fs-tree-name-template')?.shadowRoot;
+                                console.log(inputFields);
+                                console.log(inputFields?.querySelector('input[data-test-nameform-first-name="roman"]'))//?.innerHTML)
                             })
                             .catch(error => {
 
